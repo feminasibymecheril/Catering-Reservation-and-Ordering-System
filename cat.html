@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rural Roots Catering</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #4CAF50;
+            --secondary: #F57F17;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e0e0e0;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+        
+        /* Navigation */
+        nav { background: var(--primary); color: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;}
+        nav h1 { font-size: 1.5rem; font-weight: 700; cursor: pointer; letter-spacing: 1px;}
+        .nav-links button { background: rgba(255,255,255,0.1); border: 1px solid transparent; color: white; margin-left: 0.5rem; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .nav-links button:hover { background: white; color: var(--primary); }
+        .nav-links .highlight { background: var(--secondary); color: white; border: none; }
+        .nav-links .highlight:hover { background: #e65100; color: white; }
+
+        /* Container & Views */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; min-height: 80vh; }
+        .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Landing Page Hero */
+        .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, rgba(46,125,50,0.9) 0%, rgba(245,127,23,0.9) 100%), url('https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover; border-radius: 16px; color: white; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .hero h2 { font-size: 3rem; margin-bottom: 1rem; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        .hero .btn { width: auto; padding: 1rem 2.5rem; font-size: 1.1rem; border-radius: 30px; background: var(--secondary); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+
+        /* Forms */
+        .form-container { background: var(--card-bg); padding: 2.5rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); max-width: 450px; margin: 0 auto; }
+        .form-container h2 { margin-bottom: 1.5rem; text-align: center; color: var(--primary); font-weight: 700; }
+        .form-group { margin-bottom: 1.2rem; display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 0.3rem; font-weight: 600; font-size: 0.9rem; color: #555; }
+        .form-group input, .form-group select { padding: 0.8rem; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
+        
+        /* Buttons */
+        .btn { background: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; width: 100%; font-weight: 600; transition: all 0.2s; display: inline-block; text-align: center; }
+        .btn:hover { background: #1B5E20; transform: translateY(-2px); }
+        .btn-secondary { background: var(--secondary); }
+        .btn-secondary:hover { background: #E65100; }
+        .btn-danger { background: var(--danger); }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto; border-radius: 6px; }
+
+        /* Dashboard & Grids */
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s ease; border: 1px solid var(--border); position: relative; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .card h3 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1.4rem; }
+        .card p.desc { color: #666; margin-bottom: 1rem; font-size: 0.95rem; min-height: 45px; }
+        .card .price { font-size: 1.5rem; font-weight: 700; color: var(--secondary); margin-bottom: 1.5rem; }
+        
+        /* Tables */
+        .table-responsive { overflow-x: auto; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+        th, td { padding: 1.2rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: #f1f4f8; color: var(--text); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; }
+        tr:hover { background-color: #f8f9fa; }
+        
+        /* Status Badges */
+        .status { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .status.Pending { background: #ffeaa7; color: #d35400; }
+        .status.Preparing { background: #81ecec; color: #00b894; }
+        .status.Completed { background: #55efc4; color: #27ae60; }
+        .status.Cancelled { background: #ff7675; color: #c0392b; }
+        .status-select { padding: 0.4rem; border-radius: 6px; border: 1px solid var(--border); font-family: inherit; }
+
+        /* Toast Alert */
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+        .alert { padding: 1rem 2rem; margin-bottom: 1rem; border-radius: 8px; font-weight: 600; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; animation: slideIn 0.3s ease-out; }
+        .alert.success { background: var(--success); display: block; }
+        .alert.error { background: var(--danger); display: block; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h1 onclick="app.goHome()">Rural Roots</h1>
+        <div class="nav-links" id="nav-links">
+            </div>
+    </nav>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <div class="container">
+        
+        <section id="view-landing" class="view-section active">
+            <div class="hero">
+                <h2>Taste the Tradition, Delivered to You.</h2>
+                <p>Empowering rural culinary artisans to share their authentic catering commodities with the world. Fresh, traditional, and directly from our roots to your event.</p>
+                <button class="btn" onclick="app.switchView('view-login')">Start Ordering</button>
+            </div>
+            <div class="grid" style="margin-top: 3rem;">
+                <div class="card" style="border: none; box-shadow: none; background: transparent;">
+                    <h3>👨‍🍳 Authentic Chefs</h3>
+                    <p>Prepared by skilled artisans keeping traditional Indian recipes alive.</p>
+                </div>
+                <div class="card" style="border: none; box-shadow: none; background: transparent;">
+                    <h3>🌿 Fresh Ingredients</h3>
+                    <p>Sourced directly from local farmers to ensure the highest quality.</p>
+                </div>
+                <div class="card" style="border: none; box-shadow: none; background: transparent;">
+                    <h3>🚚 Reliable Delivery</h3>
+                    <p>Secure ordering and timely fulfillment for your events.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-login" class="view-section">
+            <div class="form-container">
+                <h2>Welcome Back</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <p style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem;">
+                        New here? <a href="javascript:void(0)" onclick="app.switchView('view-register')" style="color: var(--primary); font-weight: 600;">Create an account</a>
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <section id="view-register" class="view-section">
+            <div class="form-container">
+                <h2>Create Account</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="reg-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="reg-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select id="reg-role">
+                            <option value="user">Customer</option>
+                            <option value="admin">Catering Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                    <p style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem;">
+                        Already have an account? <a href="javascript:void(0)" onclick="app.switchView('view-login')" style="color: var(--primary); font-weight: 600;">Login</a>
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <section id="view-admin-dashboard" class="view-section">
+            <div class="dashboard-header">
+                <h2>Menu Management</h2>
+                <button class="btn btn-secondary" style="width: auto;" onclick="app.renderAdminOrders()">Manage All Orders</button>
+            </div>
+            
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: flex-start;">
+                <div class="form-container" style="flex: 1; margin: 0; min-width: 300px;">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary);">Add New Dish</h3>
+                    <form id="add-product-form">
+                        <div class="form-group">
+                            <label>Item Name</label>
+                            <input type="text" id="prod-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" id="prod-desc" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Price ($)</label>
+                            <input type="number" id="prod-price" min="1" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn">Add to Menu</button>
+                    </form>
+                </div>
+                <div style="flex: 2; min-width: 300px;">
+                    <h3 style="margin-bottom: 1rem; color: var(--text);">Active Menu Items</h3>
+                    <div id="admin-product-grid" class="grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-admin-orders" class="view-section">
+            <div class="dashboard-header">
+                <h2>Customer Orders</h2>
+                <button class="btn btn-secondary" style="width: auto;" onclick="app.switchView('view-admin-dashboard')">Back to Menu</button>
+            </div>
+            <div class="table-responsive">
+                <table id="admin-orders-table">
+                    <thead><tr><th>Order ID</th><th>Customer Email</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="view-user-dashboard" class="view-section">
+            <div class="dashboard-header">
+                <h2>Our Traditional Catering Menu</h2>
+                <button class="btn btn-secondary" style="width: auto;" onclick="app.renderCart()">Go to Cart</button>
+            </div>
+            <div id="user-product-grid" class="grid"></div>
+        </section>
+
+        <section id="view-cart" class="view-section">
+            <div class="dashboard-header">
+                <h2>Your Cart</h2>
+                <button class="btn btn-secondary" style="width: auto;" onclick="app.switchView('view-user-dashboard')">Continue Shopping</button>
+            </div>
+            <div id="cart-container" class="table-responsive" style="padding: 2rem; background: var(--card-bg);"></div>
+        </section>
+
+        <section id="view-user-orders" class="view-section">
+            <div class="dashboard-header">
+                <h2>My Order History</h2>
+                <button class="btn btn-secondary" style="width: auto;" onclick="app.switchView('view-user-dashboard')">Back to Menu</button>
+            </div>
+            <div class="table-responsive">
+                <table id="user-orders-table">
+                    <thead><tr><th>Order ID</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        /** Database Utility (LocalStorage) */
+        const DB = {
+            get: (key) => JSON.parse(localStorage.getItem(key)) || [],
+            set: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
+            getCurrentUser: () => JSON.parse(localStorage.getItem('currentUser')),
+            setCurrentUser: (user) => localStorage.setItem('currentUser', JSON.stringify(user)),
+            clearSession: () => localStorage.removeItem('currentUser')
+        };
+
+        /** Main App Logic */
+        const app = {
+            cart: [],
+            
+            init: () => {
+                app.seedData(); // Populate some default data if empty for the landing page
+                app.bindEvents();
+                app.checkAuth();
+            },
+
+            // Seed initial data to make the app look good on first load
+            seedData: () => {
+                if(DB.get('products').length === 0) {
+                    DB.set('products', [
+                        { id: 101, name: 'Traditional Thali', desc: 'A complete meal with rice, dal, curries, and sweets.', price: 15.00 },
+                        { id: 102, name: 'Paneer Tikka Platter', desc: 'Fresh cottage cheese marinated in rural spices.', price: 12.50 },
+                        { id: 103, name: 'Festive Biryani Pot', desc: 'Aromatic basmati rice cooked with authentic spices.', price: 20.00 }
+                    ]);
+                }
+            },
+
+            showToast: (msg, type = 'success') => {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `alert ${type}`;
+                toast.textContent = msg;
+                container.appendChild(toast);
+                setTimeout(() => { 
+                    toast.style.opacity = '0'; 
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            },
+
+            switchView: (viewId) => {
+                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                document.getElementById(viewId).classList.add('active');
+            },
+
+            goHome: () => {
+                const user = DB.getCurrentUser();
+                if(!user) app.switchView('view-landing');
+                else if(user.role === 'admin') app.switchView('view-admin-dashboard');
+                else app.switchView('view-user-dashboard');
+            },
+
+            bindEvents: () => {
+                document.getElementById('register-form').addEventListener('submit', app.handleRegister);
+                document.getElementById('login-form').addEventListener('submit', app.handleLogin);
+                document.getElementById('add-product-form').addEventListener('submit', app.handleAddProduct);
+            },
+
+            updateNav: () => {
+                const user = DB.getCurrentUser();
+                const nav = document.getElementById('nav-links');
+                if (!user) {
+                    nav.innerHTML = `
+                        <button onclick="app.switchView('view-landing')">Home</button>
+                        <button onclick="app.switchView('view-login')">Login</button>
+                        <button class="highlight" onclick="app.switchView('view-register')">Register</button>
+                    `;
+                } else if (user.role === 'admin') {
+                    nav.innerHTML = `
+                        <span style="margin-right: 15px; font-weight: 600;">Admin: ${user.name}</span>
+                        <button onclick="app.switchView('view-admin-dashboard')">Menu</button>
+                        <button onclick="app.renderAdminOrders()">Orders</button>
+                        <button class="btn-danger btn-small" onclick="app.logout()">Logout</button>
+                    `;
+                } else {
+                    nav.innerHTML = `
+                        <span style="margin-right: 15px; font-weight: 600;">Hi, ${user.name}</span>
+                        <button onclick="app.switchView('view-user-dashboard')">Menu</button>
+                        <button onclick="app.renderUserOrders()">My Orders</button>
+                        <button class="highlight" onclick="app.renderCart()">Cart (${app.cart.length})</button>
+                        <button class="btn-danger btn-small" onclick="app.logout()">Logout</button>
+                    `;
+                }
+            },
+
+            checkAuth: () => {
+                const user = DB.getCurrentUser();
+                app.updateNav();
+                if (!user) {
+                    app.switchView('view-landing');
+                } else {
+                    if (user.role === 'admin') {
+                        app.switchView('view-admin-dashboard');
+                        app.renderAdminProducts();
+                    } else {
+                        app.switchView('view-user-dashboard');
+                        app.renderUserProducts();
+                    }
+                }
+            },
+
+            /* Authentication */
+            handleRegister: (e) => {
+                e.preventDefault();
+                const name = document.getElementById('reg-name').value;
+                const email = document.getElementById('reg-email').value;
+                const password = document.getElementById('reg-password').value;
+                const role = document.getElementById('reg-role').value;
+
+                const users = DB.get('users');
+                if (users.find(u => u.email === email)) {
+                    app.showToast('Email already registered!', 'error');
+                    return;
+                }
+
+                users.push({ id: Date.now(), name, email, password, role });
+                DB.set('users', users);
+                app.showToast('Account created successfully! Please login.');
+                app.switchView('view-login');
+                e.target.reset();
+            },
+
+            handleLogin: (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                let users = DB.get('users');
+                // Auto-create super admin if completely empty
+                if (users.length === 0 && email === 'admin@admin.com') {
+                    users.push({ id: 1, name: 'Super Admin', email: 'admin@admin.com', password: 'admin', role: 'admin' });
+                    DB.set('users', users);
+                }
+
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    DB.setCurrentUser({ id: user.id, name: user.name, email: user.email, role: user.role });
+                    app.showToast(`Welcome back, ${user.name}!`);
+                    app.checkAuth();
+                    e.target.reset();
+                } else {
+                    app.showToast('Invalid email or password', 'error');
+                }
+            },
+
+            logout: () => {
+                DB.clearSession();
+                app.cart = [];
+                app.showToast('Logged out successfully');
+                app.checkAuth();
+            },
+
+            /* Product Management (Admin) */
+            handleAddProduct: (e) => {
+                e.preventDefault();
+                const product = {
+                    id: Date.now(),
+                    name: document.getElementById('prod-name').value,
+                    desc: document.getElementById('prod-desc').value,
+                    price: parseFloat(document.getElementById('prod-price').value)
+                };
+
+                const products = DB.get('products');
+                products.push(product);
+                DB.set('products', products);
+                
+                app.showToast('Menu item added!');
+                app.renderAdminProducts();
+                e.target.reset();
+            },
+
+            deleteProduct: (id) => {
+                if(confirm("Are you sure you want to delete this menu item?")) {
+                    let products = DB.get('products');
+                    products = products.filter(p => p.id !== id);
+                    DB.set('products', products);
+                    app.showToast('Item deleted from menu', 'success');
+                    app.renderAdminProducts();
+                }
+            },
+
+            renderAdminProducts: () => {
+                const products = DB.get('products');
+                const grid = document.getElementById('admin-product-grid');
+                grid.innerHTML = products.length === 0 ? '<p style="padding: 2rem;">No items in menu yet.</p>' : '';
+                
+                products.forEach(p => {
+                    grid.innerHTML += `
+                        <div class="card">
+                            <h3>${p.name}</h3>
+                            <p class="desc">${p.desc}</p>
+                            <p class="price">$${p.price.toFixed(2)}</p>
+                            <button class="btn btn-danger btn-small" onclick="app.deleteProduct(${p.id})">Delete Item</button>
+                        </div>
+                    `;
+                });
+            },
+
+            /* Shopping (User) */
+            renderUserProducts: () => {
+                const products = DB.get('products');
+                const grid = document.getElementById('user-product-grid');
+                grid.innerHTML = products.length === 0 ? '<p>Menu is currently being updated by the chefs. Check back soon!</p>' : '';
+                
+                products.forEach(p => {
+                    grid.innerHTML += `
+                        <div class="card">
+                            <h3>${p.name}</h3>
+                            <p class="desc">${p.desc}</p>
+                            <p class="price">$${p.price.toFixed(2)}</p>
+                            <button class="btn" onclick="app.addToCart(${p.id})">Add to Cart</button>
+                        </div>
+                    `;
+                });
+            },
+
+            addToCart: (id) => {
+                const product = DB.get('products').find(p => p.id === id);
+                if (product) {
+                    app.cart.push(product);
+                    app.updateNav();
+                    app.showToast(`${product.name} added to cart!`);
+                }
+            },
+
+            removeFromCart: (index) => {
+                app.cart.splice(index, 1);
+                app.updateNav();
+                app.renderCart();
+            },
+
+            renderCart: () => {
+                app.switchView('view-cart');
+                const container = document.getElementById('cart-container');
+                if (app.cart.length === 0) {
+                    container.innerHTML = '<div style="text-align:center; padding: 2rem;"><h3>Your cart is empty.</h3><br><button class="btn" style="width:auto" onclick="app.switchView(\'view-user-dashboard\')">Browse Menu</button></div>';
+                    return;
+                }
+
+                const total = app.cart.reduce((sum, item) => sum + item.price, 0);
+                let html = '<table><thead><tr><th>Item</th><th>Price</th><th>Action</th></tr></thead><tbody>';
+                app.cart.forEach((item, index) => {
+                    html += `<tr>
+                                <td><strong>${item.name}</strong></td>
+                                <td>$${item.price.toFixed(2)}</td>
+                                <td><button class="btn btn-danger btn-small" onclick="app.removeFromCart(${index})">Remove</button></td>
+                             </tr>`;
+                });
+                html += `</tbody></table>
+                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 2px solid #eee;">
+                             <h3 style="font-size: 1.5rem;">Total: $${total.toFixed(2)}</h3>
+                             <button class="btn" style="width: auto; padding: 1rem 3rem;" onclick="app.placeOrder()">Place Order</button>
+                         </div>`;
+                container.innerHTML = html;
+            },
+
+            /* Order Processing & Viewing */
+            placeOrder: () => {
+                const user = DB.getCurrentUser();
+                const order = {
+                    id: 'ORD' + Math.floor(Math.random() * 1000000), // Random Order ID
+                    userId: user.id,
+                    userEmail: user.email,
+                    items: app.cart,
+                    total: app.cart.reduce((sum, item) => sum + item.price, 0),
+                    date: new Date().toLocaleDateString(),
+                    status: 'Pending'
+                };
+
+                const orders = DB.get('orders');
+                orders.push(order);
+                DB.set('orders', orders);
+
+                app.cart = []; // Empty cart
+                app.showToast('Order placed successfully! The chefs have been notified.');
+                app.updateNav();
+                app.renderUserOrders();
+            },
+
+            cancelOrder: (orderId) => {
+                if(confirm("Are you sure you want to cancel this order?")) {
+                    let orders = DB.get('orders');
+                    const orderIndex = orders.findIndex(o => o.id === orderId);
+                    if(orderIndex > -1) {
+                        orders[orderIndex].status = 'Cancelled';
+                        DB.set('orders', orders);
+                        app.showToast('Order cancelled successfully', 'success');
+                        app.renderUserOrders();
+                    }
+                }
+            },
+
+            renderUserOrders: () => {
+                app.switchView('view-user-orders');
+                const user = DB.getCurrentUser();
+                // Filter orders by current user
+                const orders = DB.get('orders').filter(o => o.userId === user.id).reverse(); 
+                const tbody = document.querySelector('#user-orders-table tbody');
+                tbody.innerHTML = '';
+
+                if(orders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">You have no order history.</td></tr>';
+                    return;
+                }
+
+                orders.forEach(o => {
+                    const itemNames = o.items.map(i => i.name).join(', ');
+                    // Only allow cancellation if status is pending
+                    const actionBtn = o.status === 'Pending' ? 
+                        `<button class="btn btn-danger btn-small" onclick="app.cancelOrder('${o.id}')">Cancel Order</button>` : 
+                        `<span style="color:#888; font-size:0.85rem;">No actions available</span>`;
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${o.id}</strong></td>
+                            <td>${o.date}</td>
+                            <td title="${itemNames}">${o.items.length} items</td>
+                            <td><strong>$${o.total.toFixed(2)}</strong></td>
+                            <td><span class="status ${o.status}">${o.status}</span></td>
+                            <td>${actionBtn}</td>
+                        </tr>
+                    `;
+                });
+            },
+
+            /* Admin Order Management */
+            updateOrderStatus: (orderId, newStatus) => {
+                let orders = DB.get('orders');
+                const orderIndex = orders.findIndex(o => o.id === orderId);
+                if(orderIndex > -1) {
+                    orders[orderIndex].status = newStatus;
+                    DB.set('orders', orders);
+                    app.showToast(`Order ${orderId} updated to ${newStatus}`);
+                    app.renderAdminOrders(); // re-render to reflect changes
+                }
+            },
+
+            renderAdminOrders: () => {
+                app.switchView('view-admin-orders'); // Ensure view is switched when routing is called
+                const orders = DB.get('orders').reverse(); // Show newest first
+                const tbody = document.querySelector('#admin-orders-table tbody');
+                tbody.innerHTML = '';
+
+                if(orders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No orders have been placed yet.</td></tr>';
+                    return;
+                }
+
+                orders.forEach(o => {
+                    const itemNames = o.items.map(i => i.name).join(', ');
+                    
+                    // Create dropdown for Admin to change status
+                    const statuses = ['Pending', 'Preparing', 'Completed', 'Cancelled'];
+                    let statusOptions = statuses.map(s => 
+                        `<option value="${s}" ${o.status === s ? 'selected' : ''}>${s}</option>`
+                    ).join('');
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${o.id}</strong></td>
+                            <td>${o.userEmail}</td>
+                            <td title="${itemNames}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${itemNames}</td>
+                            <td><strong>$${o.total.toFixed(2)}</strong></td>
+                            <td><span class="status ${o.status}">${o.status}</span></td>
+                            <td>
+                                <select class="status-select" onchange="app.updateOrderStatus('${o.id}', this.value)">
+                                    ${statusOptions}
+                                </select>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        };
+
+        // Initialize App
+        window.onload = app.init;
+    </script>
+</body>
+</html>
